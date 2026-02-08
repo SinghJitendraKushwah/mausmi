@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Official Sali No. 1 Challenge ✨</title>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root { --main: #ff85a1; --accent: #9b59b6; --bg: #fff0f3; }
+  body { 
+    font-family: 'Quicksand', sans-serif; background: var(--bg); 
+    display: flex; justify-content: center; align-items: center; 
+    height: 100vh; margin: 0; overflow: hidden; 
+  }
+  /* Floating Hearts Background */
+  .heart-bg { position: absolute; font-size: 20px; color: rgba(255, 133, 161, 0.3); animation: float 6s infinite linear; z-index: -1; }
+  @keyframes float { from { transform: translateY(100vh); } to { transform: translateY(-10vh); } }
+
+  .card { 
+    background: rgba(255, 255, 255, 0.95); padding: 30px; border-radius: 30px; 
+    box-shadow: 0 20px 60px rgba(255, 133, 161, 0.3); 
+    width: 340px; text-align: center; border: 3px solid #fff;
+    backdrop-filter: blur(5px);
+  }
+  .step { display: none; animation: heartPop 0.5s ease; }
+  .step.active { display: block; }
+  
+  @keyframes heartPop { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+  .emoji-header { font-size: 80px; margin-bottom: 10px; display: block; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)); }
+  h2 { font-family: 'Dancing Script', cursive; color: var(--main); font-size: 32px; margin: 10px 0; }
+  p { color: #555; font-size: 16px; line-height: 1.5; margin-bottom: 25px; }
+  
+  .btn { 
+    padding: 15px 20px; border-radius: 50px; border: none; 
+    font-weight: 700; cursor: pointer; transition: 0.3s; width: 100%;
+    background: linear-gradient(45deg, var(--main), var(--accent)); color: white;
+    font-size: 16px; letter-spacing: 1px;
+  }
+  .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(255, 133, 161, 0.4); }
+
+  .btn-group { display: flex; gap: 10px; position: relative; height: 60px; margin-top: 20px; }
+  .yes-btn { background: #2ecc71; width: 140px; position: absolute; left: 0; border-radius: 50px; }
+  .no-btn { background: #ff7675; width: 140px; position: absolute; right: 0; border-radius: 50px; }
+</style>
+</head>
+<body>
+
+<div id="hearts-container"></div>
+
+<div class="card">
+  <div class="step active" id="step1">
+    <span class="emoji-header">🤭</span>
+    <h2>Oye Chulbuli!</h2>
+    <p>Suno Sali Sahiba, ek "Naughty" secret batani hai jo sirf hamare beech rahegi (Shivi ko mat batana!). Bataun?</p>
+    <button class="btn" onclick="nextStep(2)">Haan Jeeju, jaldi! ✨</button>
+  </div>
+
+  <div class="step" id="step2">
+    <span class="emoji-header">👸</span>
+    <h2>Meri Choice Best Hai!</h2>
+    <p>Shivi ne toh mera dil churaya hi hai, par unka sabse best decision aapko apni behen banana tha! Double dhamaka! 💥</p>
+    <button class="btn" onclick="nextStep(3)">Awww, true! 🥰</button>
+  </div>
+
+  <div class="step" id="step3">
+    <span class="emoji-header">🕵️‍♀️</span>
+    <h2>Partner in Crime?</h2>
+    <p>Kya aap meri 'Spy' banogi? Shivi jab bhi mera phone check kare ya gussa ho, aap mujhe pehle alert karogi? 😉</p>
+    <button class="btn" onclick="nextStep(4)">Done! Pakka Deal 🤝</button>
+  </div>
+
+  <div class="step" id="step4">
+    <span class="emoji-header">🍦</span>
+    <h2>Sali No. 1 Title</h2>
+    <p>Shivi kehti hai aap usse zyada "Sweet" ho... Maine kaha "Ruko, check karke batata hoon!" Party kab hai?</p>
+    <button class="btn" onclick="nextStep(5)">Abhi khilati hoon! 😂</button>
+  </div>
+
+  <div class="step" id="step5">
+    <span class="emoji-header">🍕</span>
+    <h2>Test of Love!</h2>
+    <p>Toh meri pyari Sali Sahiba, kya aap aaj Jeeju aur Di ko Pizza treat dogi? (No mat bolna, Shivi dekh rahi hai!)</p>
+    <div class="btn-group">
+      <button class="btn yes-btn" onclick="celebrate()">Haan Ji! 🍕</button>
+      <button class="btn no-btn" id="noBtn">Bhool Jao! 😜</button>
+    </div>
+  </div>
+
+  <div class="step" id="step6">
+    <span class="emoji-header">🌈</span>
+    <h2>World's Best Sali!</h2>
+    <p>Ye hui na baat! Shivi dekh lo, meri Sali No. 1 hai! <br> I Love You (as a sweet sister)! Party loading... 🥳💖</p>
+  </div>
+</div>
+
+<script>
+  // Create Floating Hearts
+  const heartsContainer = document.getElementById('hearts-container');
+  const symbols = ['❤️', '💖', '✨', '🌸', '💜'];
+  for (let i = 0; i < 15; i++) {
+    const heart = document.createElement('div');
+    heart.className = 'heart-bg';
+    heart.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+    heart.style.opacity = Math.random();
+    heartsContainer.appendChild(heart);
+  }
+
+  function nextStep(n) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById('step' + n).classList.add('active');
+  }
+
+  const noBtn = document.getElementById('noBtn');
+  const moveButton = () => {
+    const x = Math.random() * (window.innerWidth - 150);
+    const y = Math.random() * (window.innerHeight - 80);
+    noBtn.style.position = 'fixed';
+    noBtn.style.left = x + 'px';
+    noBtn.style.top = y + 'px';
+  };
+
+  noBtn.addEventListener('mouseover', moveButton);
+  noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveButton(); });
+
+  function celebrate() {
+    nextStep(6);
+    // Girly Confetti (Pink, Gold, Purple)
+    var end = Date.now() + (4 * 1000);
+    (function frame() {
+      confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff85a1', '#9b59b6', '#ffd700'] });
+      confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff85a1', '#9b59b6', '#ffd700'] });
+      if (Date.now() < end) requestAnimationFrame(frame);
+    }());
+  }
+</script>
+
+</body>
+</html>
